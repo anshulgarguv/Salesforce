@@ -1,0 +1,49 @@
+<apex:page controller="HomeController">
+  <h1> My Search Page </h1>
+    <apex:form >
+        <apex:pageBlock >
+            <table>
+                
+                <tr>
+                    <td style="height:10px;"></td>
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Search for a Complaint"/></td>
+                </tr>
+                <tr>
+                    <td><apex:inputText value="{!controllerQuery}"/></td>
+                </tr>
+                <tr>
+                    <td style="height:10px;"></td>
+                </tr>
+                <tr>
+                    <td><apex:commandButton action="{!executeSearch}" value="Search" rerender="MyPanel"/></td>
+                </tr>
+            </table> 
+            <apex:outputPanel id="MyPanel"> 
+            <apex:pageBlockTable value="{!listOfObj[0]}" var="comp" rendered="{!acctDisplay}">
+            
+                <apex:column value="{!comp.Id}"/>
+                <apex:column value="{!comp.name}"/>
+                
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!listOfObj[1]}" var="comp1" rendered="{!contDisplay}">
+                <apex:column value="{!comp1.Id}"/>
+                <apex:column value="{!comp1.name}"/>
+                
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!listOfObj[2]}" var="comp2" rendered="{!oppDisplay}">
+                <apex:column value="{!comp2.Id}"/>
+                <apex:column value="{!comp2.name}"/>
+                
+            </apex:pageBlockTable>
+            <apex:pageBlockTable value="{!listOfObj[3]}" var="comp3" rendered="{!leadDisplay}">
+                <apex:column value="{!comp3.Id}"/>
+                <apex:column value="{!comp3.name}"/>
+                
+            </apex:pageBlockTable>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

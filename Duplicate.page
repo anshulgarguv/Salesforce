@@ -1,0 +1,78 @@
+<apex:page controller="AdvanceAccountController">
+
+<script src="{!URLFOR($Resource.MySecond,'MyJSFile.js')}"/>
+  <h1> Advance VisualForce </h1>
+    <apex:form >
+    <apex:pageBlock >
+            <table>
+                <tr>
+                    <td style="height:10px;"></td>
+                </tr>
+                <tr>
+                    <td><apex:outputLabel value="Search for a Complaint"/></td>
+                </tr>
+                <tr>
+                    <td><apex:inputText value="{!controllerQuery}"/></td>
+                </tr>
+                <tr>
+                    <td style="height:10px;"></td>
+                </tr>
+                <tr>
+                    <td><apex:commandButton action="{!executeSearch}" value="Search" /></td>
+                    <td><apex:commandButton action="{!Clear}" value="Clear" /></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <apex:repeat value="{!alphabets}" var="nn">
+                    <td><apex:commandLink action="{!display}" ><apex:param value="{!nn}" name="sss"  assignTo="{!SearchVar}"/> {!nn}</apex:commandLink></td>
+                    </apex:repeat>
+                </tr>
+            </table>
+    </apex:pageBlock>
+  
+    <apex:pageBlock rendered="{!searchDisplay}" >
+        <apex:pageBlockTable value="{!listOfObj}" var="comp"  rendered="{!AccountPresent}">
+                <apex:column value="{!comp.Id}"/>
+                <apex:column headerValue="Name">
+                        <apex:outputLink value="/apex/AccountDetailsPage?id={!comp.id}">{!comp.name}
+                        </apex:outputLink>
+                 </apex:column>
+                 <apex:column headerValue="Contacts">
+                        <apex:commandLink action="{!getcontacts}" >Related Contacts
+                        <apex:param value="{!comp.id}" name="idforcontact" assignTo="{!recId}"/>
+                        </apex:commandLink>
+                 </apex:column>
+         </apex:pageBlockTable>
+         <p rendered="{!lengthOfQuery}">{!message}</p>
+         <p>There are {!listSize} records matching</p>
+     </apex:pageBlock>
+     
+     
+    <apex:pageBlock rendered="{!searchVariable}">
+        <apex:pageBlockTable value="{!acct}" var="comp" >
+                <apex:column value="{!comp.Id}"/>
+                <apex:column headerValue="Name">
+                        <apex:outputLink value="/apex/AccountDetailsPage?id={!comp.id}">{!comp.name}
+                        </apex:outputLink>
+                </apex:column>
+                <apex:column value="{!comp.phone}"/>
+                <apex:column value="{!comp.billingcity}"/>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+        
+         
+     <apex:pageBlock Title="Contact" rendered="{!showCont}">
+        <apex:pageBlockTable value="{!contacts}" var="comp1" >
+                 <apex:column value="{!comp1.id}"/>
+                 <apex:column value="{!comp1.FirstName}"/>
+                 <apex:column value="{!comp1.LastName}"/>
+                 <apex:column >
+                     <apex:commandLink onclick="deleteContactFromAccount('{!comp1.id}')">Delete</apex:commandLink>
+                  </apex:column>
+        </apex:pageBlockTable>
+     </apex:pageBlock>
+     
+  </apex:form>
+
+</apex:page>

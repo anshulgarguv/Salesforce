@@ -1,0 +1,23 @@
+<apex:page standardController="Campaign" extensions="CampaignFilter">
+  <apex:form >
+        <apex:selectList value="{!listValue}" size="1">
+           <apex:selectOptions value="{!listOptions}"/> 
+        </apex:selectList>
+        <apex:commandButton value="GO" action="{!FilteredCampaign}"/>
+    
+    <apex:pageBlock >
+        <apex:pageBlockTable value="{!filteredCampaign}" var="campaign">
+            <apex:column headerValue="Name">
+            <apex:outputLink value="/apex/MyPage?id={!campaign.id}">{!campaign.name}
+            
+            </apex:outputLink>
+            
+         </apex:column>
+            <apex:column value="{!campaign.status}"/>
+            
+            <apex:column value="{!campaign.startdate}"/>
+        </apex:pageBlockTable>
+        
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

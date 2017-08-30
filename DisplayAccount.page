@@ -1,0 +1,36 @@
+<apex:page controller="AccountController">
+  <h1> My Search Page </h1>
+    <apex:form >
+        <apex:pageBlock >
+        <apex:pageBlockTable value="{!acct}" var="comp">
+            
+                <apex:column value="{!comp.Id}"/>
+                <apex:column >
+                <apex:commandLink value="{!comp.Name}" action="{!getcontacts}" rerender="conttable">
+                <apex:param value="{!comp.id}" name="idforcontact" assignTo="{!recId}"/>
+                </apex:commandLink>
+               </apex:column>
+                <apex:column value="{!comp.phone}"/>
+                 <apex:column value="{!comp.billingcity}"/>
+            </apex:pageBlockTable>
+            
+        </apex:pageBlock>
+        </apex:form>
+        <apex:outputPanel id="conttable">
+        <apex:pageBlock Title="Contact" rendered="{!x}">
+        <apex:pageBlockTable value="{!contacts}" var="comp1" >
+        <apex:column value="{!comp1.id}"/>
+                 <apex:column value="{!comp1.FirstName}"/>
+                 <apex:column value="{!comp1.LastName}"/>
+        </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+        <apex:pageBlock Title="Opportunity" rendered="{!displayOpp}">
+        <apex:pageBlockTable value="{!opp}" var="comp2" id="conttable">
+        <apex:column value="{!comp2.id}"/>
+                 <apex:column value="{!comp2.Name}"/>
+                 
+        </apex:pageBlockTable>
+        </apex:pageBlock>
+        </apex:outputPanel>
+        </apex:page>

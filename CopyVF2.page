@@ -1,0 +1,86 @@
+<apex:page StandardController="Account" recordSetVar="AllAccountList" extensions="PM5Controller">
+    <apex:form id="AccoutListPage">
+    <apex:pageMessages id="ErrorMessage" />
+    
+        <apex:pageBlock >
+             <apex:inputtext value="{!searchString }" onkeypress=" return enterPressed(event)"/>
+             <apex:actionfunction name="callSearchFunction" action="{!searchAction}" reRender="searchedRecords,clearLink,ErrorMessage " />
+             <apex:commandButton action="{!searchAction}" value="Search" reRender="searchedRecords,clearLink,ErrorMessage "  />
+             <apex:outputPanel id="clearLink" >
+             <apex:commandLink value="Clear Search"  action="{!clearList}" rendered="{!accountList != NULL}" reRender="AccoutListPage" />
+             </apex:outputPanel>
+        </apex:pageBlock>
+        
+        <apex:pageBlock >
+             <apex:pageBlockTable value="{!AllAccountList}" var="accountObj">
+                 <apex:column >
+                 <apex:facet name="header">Account Name</apex:facet>
+                          {!accountObj.Name}
+                 </apex:column>
+             </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+        <apex:outputPanel id="searchedRecords" >
+            <apex:pageBlock rendered="{!accountList != NULL}">
+                 <apex:pageBlockTable value="{!accountList}" var="accountObj">
+                     <apex:column >
+                         <apex:facet name="header">Account Name</apex:facet>
+                         <apex:commandLink action="{!showRelatedContact}" reRender="relatedContactTable" > 
+                         <apex:outputText value="{!accountObj.Name}"/>
+                         <apex:param value="{!accountObj.Id}" name="currentAccountObjId"/>                           
+                         </apex:commandLink>                 
+                     </apex:column>
+                 </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="relatedContactTable" >
+             <apex:pageBlock rendered="{!accountId != NULL}">
+                     <apex:repeat value="{!alphabets}" var="eachCharacter">
+                         <apex:commandLink action="{! paginationDemo}" rerender="contacts" >
+                             <apex:param name="character" value="{!eachCharacter}"/>
+                             {!eachCharacter}
+                          </apex:commandLink>
+                     </apex:repeat>
+              <apex:outputPanel id="contacts">
+                  <apex:pageBlockTable value="{!contactList}" var="contactObj" rendered="{!contactList != NULL}">
+                     <apex:column >
+                     <apex:facet name="header">Contact Name</apex:facet>
+                             {!contactObj.Name}
+                     </apex:column>
+                     <apex:column >
+                         <apex:commandLink onclick="callDeleteMethod('{!contactObj.Id}')" rerender="contacts" action="{!paginationDemo}" onComplete=" alert('Contact Deleted !');" >
+                              <apex:outputText value="Delete"/>
+                         </apex:commandLink>
+                     </apex:column>
+                 </apex:pageBlockTable>
+              </apex:outputPanel>
+                </apex:pageBlock>
+            </apex:outputPanel>
+    </apex:form>
+    
+    <script>
+        function enterPressed(e){
+            if(e.keyCode == 13){
+               
+                e.preventDefault();
+                console.log('abxd');
+                callSearchFunction();
+                return false;
+            }
+        }
+        
+        function callDeleteMethod(contactRecordId){
+            console.log('Entered');
+            Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.PM5Controller.removeContact}',contactRecordId,function(result, event){
+                    if (event.status) {
+                        console.log('Done');
+                     } 
+                     else {
+                         console.log(event.message);
+                    }
+            });}
+    </script>
+    
+</apex:page>
